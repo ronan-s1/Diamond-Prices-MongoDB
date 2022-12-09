@@ -1,3 +1,4 @@
 # Diamond-Prices-MongoDB
 
-dataset: https://www.kaggle.com/datasets/vittoriogiatti/diamondprices
+## Description
+I have created a MongoDB database using the [Diamond Prices](https://www.kaggle.com/datasets/vittoriogiatti/diamondprices) dataset.
