@@ -3,54 +3,54 @@ use("diamond_prices");
 // // all documents
 db.diamonds.find()
 
-// //50 >= depth < 53, accessing array
-// db.diamonds.find(
-//     {"size.depth": {$gte: 50, $lt: 53}},
-//     { 
-//         _id: 0,
-//         "size.table": 0,
-//         "dimensions": 0,
-//         "appearance": 0
-//     }
-// )
+//50 >= depth < 53, accessing array
+db.diamonds.find(
+    {"size.depth": {$gte: 50, $lt: 53}},
+    { 
+        _id: 0,
+        "size.table": 0,
+        "dimensions": 0,
+        "appearance": 0
+    }
+)
 
-// //gets price of diamonds based on cut and more
-// db.diamonds.aggregate([
-//         {$unwind: "$appearance"},
+//gets price of diamonds based on cut and more
+db.diamonds.aggregate([
+        {$unwind: "$appearance"},
 
-//         {$group:{
-//             _id: "$appearance.cut",
-//             "number of cuts": {$sum: 1},
-//             "total price (USD)": {$sum: "$price"},
-//             "average price (USD)": {$avg: "$price"}
-//         }},
+        {$group:{
+            _id: "$appearance.cut",
+            "number of cuts": {$sum: 1},
+            "total price (USD)": {$sum: "$price"},
+            "average price (USD)": {$avg: "$price"}
+        }},
 
-//         {$sort: {"average price (USD)": -1}}
-// ])
+        {$sort: {"average price (USD)": -1}}
+])
 
-// //most expenisve diamond
-// db.diamonds.find({},{dimensions: 0, _id: 0}).sort({price:-1}).limit(1)
+//most expenisve diamond
+db.diamonds.find({},{dimensions: 0, _id: 0}).sort({price:-1}).limit(1)
 
-// // gets the average dimensions based on clarity and rounds the value to 4 decimal places
-// db.diamonds.aggregate([
-//     {$unwind: "$dimensions"},
-//     {$unwind: "$appearance"},
+// gets the average dimensions based on clarity and rounds the value to 4 decimal places
+db.diamonds.aggregate([
+    {$unwind: "$dimensions"},
+    {$unwind: "$appearance"},
 
-//     {$group: {
-//         _id: "$appearance.clarity",
-//         "avg x": {$avg: "$dimensions.x"},
-//         "avg y": {$avg: "$dimensions.y"},
-//         "avg z": {$avg: "$dimensions.z" }
-//     }},
+    {$group: {
+        _id: "$appearance.clarity",
+        "avg x": {$avg: "$dimensions.x"},
+        "avg y": {$avg: "$dimensions.y"},
+        "avg z": {$avg: "$dimensions.z" }
+    }},
 
-//     {$project: {
-//         "avg x": {$round: ["$avg x", 4]}, 
-//         "avg y": {$round: ["$avg y", 4]}, 
-//         "avg z": {$round: ["$avg z", 4]}
-//     }},
+    {$project: {
+        "avg x": {$round: ["$avg x", 4]}, 
+        "avg y": {$round: ["$avg y", 4]}, 
+        "avg z": {$round: ["$avg z", 4]}
+    }},
 
-//     {$sort: {_id: 1}}
-// ])
+    {$sort: {_id: 1}}
+])
 
 // -- Manipulating data --
 db.diamonds.find(
